@@ -236,7 +236,7 @@ pub type WindowsFields = WindowsFields64;
 
 impl WindowsFields {
     /// Validate the Windows-Specific Fields
-    /// 
+    ///
     /// This method DOES NOT validate `check_sum` field since
     /// the algorithm for computing the checksum is incorporated
     /// into IMAGEHELP.DLL, which is os-dependent.
@@ -248,7 +248,8 @@ impl WindowsFields {
         if self.section_alignment < self.file_alignment {
             error_messages.push("SectionAlignment must be greater than or equal to FileAlignment.");
         }
-        if self.file_alignment < 512 || self.file_alignment > 0x1000 || self.file_alignment % 2 != 0 {
+        if self.file_alignment < 512 || self.file_alignment > 0x1000 || self.file_alignment % 2 != 0
+        {
             error_messages.push("FileAlignment should be a power of 2 between 512 and 64K.");
         }
         if self.size_of_image % self.section_alignment != 0 {

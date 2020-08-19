@@ -41,7 +41,9 @@ impl DosHeader {
         if self.signature == DOS_MAGIC {
             Ok(())
         } else {
-            Err(error::Error::Malformed(String::from("Unexpected DOS signature, expecting 0x5A4D.")))
+            Err(error::Error::Malformed(String::from(
+                "Unexpected DOS signature, expecting 0x5A4D.",
+            )))
         }
     }
 }
@@ -159,7 +161,7 @@ impl CoffHeader {
     }
 
     /// Validate the `CoffHeader`.
-    /// 
+    ///
     /// `is_image` being `true` indicates the `CoffHeader` is in a `PE`,
     /// being `false` indicates the `CoffHeader` is in a `Coff`.
     pub fn validate(&self, is_image: bool) -> error::Result<()> {
@@ -177,7 +179,9 @@ impl CoffHeader {
             }
         }
         let characteristic_error_message;
-        if let Err(error::Error::Malformed(error_message)) = super::characteristic::validate(self.characteristics, is_image) {
+        if let Err(error::Error::Malformed(error_message)) =
+            super::characteristic::validate(self.characteristics, is_image)
+        {
             characteristic_error_message = error_message.clone();
             error_messages.push(&characteristic_error_message);
         }
@@ -226,7 +230,9 @@ impl Header {
             error_messages.push(error_message);
         }
         if self.signature != PE_MAGIC {
-            error_messages.push(String::from(r#"Unexpected PE signature, expecting "PE\0\0" in little endian."#));
+            error_messages.push(String::from(
+                r#"Unexpected PE signature, expecting "PE\0\0" in little endian."#,
+            ));
         }
         if let Err(error::Error::Malformed(error_message)) = self.coff_header.validate(true) {
             error_messages.push(error_message);

@@ -104,14 +104,15 @@ pub fn is_exe(characteristics: u16) -> bool {
 }
 
 /// Validate the characteristics.
-/// 
+///
 /// `is_image` being `true` indicates the characteristics is in a `PE`,
 /// being `false` indicates the characteristics is in a `Coff`.
 pub fn validate(characteristics: u16, is_image: bool) -> error::Result<()> {
     let mut error_messages = vec![];
     if is_image {
         if !has_flag(characteristics, IMAGE_FILE_EXECUTABLE_IMAGE) {
-            error_messages.push("If IMAGE_FILE_EXECUTABLE_IMAGE is not set, it indicates a linker error.");
+            error_messages
+                .push("If IMAGE_FILE_EXECUTABLE_IMAGE is not set, it indicates a linker error.");
         }
     } else {
         if has_flag(characteristics, IMAGE_FILE_RELOCS_STRIPPED) {
@@ -120,7 +121,6 @@ pub fn validate(characteristics: u16, is_image: bool) -> error::Result<()> {
         if has_flag(characteristics, IMAGE_FILE_EXECUTABLE_IMAGE) {
             error_messages.push("IMAGE_FILE_EXECUTABLE_IMAGE is image only.");
         }
-
     }
     if has_flag(characteristics, IMAGE_FILE_LINE_NUMS_STRIPPED) {
         error_messages.push("IMAGE_FILE_LINE_NUMS_STRIPPED is deprecated and should be zero.")

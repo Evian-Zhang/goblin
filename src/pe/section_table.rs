@@ -165,7 +165,7 @@ impl SectionTable {
     }
 
     /// Validate the `SectionTable`.
-    /// 
+    ///
     /// `is_image` being `true` indicates the `SectionTable` is in a `PE`,
     /// being `false` indicates the `SectionTable` is in a `Coff`.
     pub fn validate(&self, is_image: bool) -> error::Result<()> {
@@ -183,13 +183,15 @@ impl SectionTable {
                 error_messages.push("PointerToLinenumbers should be zero for an image because COFF debugging information is deprecated.");
             }
             if self.number_of_relocations != 0 {
-                error_messages.push("NumberOfRelocations should be set to zero for executable images.");
+                error_messages
+                    .push("NumberOfRelocations should be set to zero for executable images.");
             }
             if self.number_of_linenumbers != 0 {
                 error_messages.push("NumberOfLinenumbers shuold be zero for an image because COFF debugging information is deprecated.");
             }
             if self.name.contains(&b'$') {
-                error_messages.push(r#"The section name in an image file never contains a "$"? character."#);
+                error_messages
+                    .push(r#"The section name in an image file never contains a "$"? character."#);
             }
         } else {
             if self.virtual_size != 0 {
@@ -199,7 +201,11 @@ impl SectionTable {
         if error_messages.is_empty() {
             Ok(())
         } else {
-            Err(error::Error::Malformed(format!("For section {}:\n{}", String::from_utf8_lossy(&self.name), error_messages.join("\n"))))
+            Err(error::Error::Malformed(format!(
+                "For section {}:\n{}",
+                String::from_utf8_lossy(&self.name),
+                error_messages.join("\n")
+            )))
         }
     }
 }
